@@ -18,8 +18,8 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         
         guard let windowScene = (scene as? UIWindowScene) else { return }
         
-        let chatViewController = ChatViewController()
-        let navigationController = UINavigationController(rootViewController: chatViewController)
+        let viewController = MenuViewController()
+        let navigationController = UINavigationController(rootViewController: viewController)
         
         window = UIWindow(frame: windowScene.coordinateSpace.bounds)
         window?.windowScene = windowScene

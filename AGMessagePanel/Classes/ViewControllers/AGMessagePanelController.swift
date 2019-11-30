@@ -70,19 +70,19 @@ open class AGMessagePanelController: UIViewController, AGMessagePanelDelegate {
     }
     
     open func textViewTopOffset() -> CGFloat {
-        return 8.0
+        return 10.0
     }
     
     open func textViewBottomOffset() -> CGFloat {
-        return 8.0
+        return 10.0
     }
     
     open func textViewLeftOffset() -> CGFloat {
-        return 15.0
+        return 10.0
     }
     
     open func textViewRightOffset() -> CGFloat {
-        return 15.0
+        return 10.0
     }
     
     open func textViewCornerRadius() -> CGFloat {

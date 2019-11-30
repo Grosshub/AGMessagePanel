@@ -13,13 +13,16 @@ class ChatViewController: UIViewController {
     
     private var chatView: ChatView!
     private let keyboardController = KeyboardController()
-    private let chatMessagePanelController = ChatMessagePanelController(type: .rightButtonOnly)
-    
-    // Table view content
-    private let chatLocalPersistence = ChatLocalPersistence()
     private let kChatMessageCellID = "kChatMessageCellID"
     
-    init() {
+    private var chatMessagePanelController: ChatMessagePanelController
+    private var chatPersistenceStorage: ChatPersistenceStorageProtocol
+    
+    init(type: MessagePanelType, persistenceStorage: ChatPersistenceStorageProtocol) {
+        
+        chatMessagePanelController = ChatMessagePanelController(type: type)
+        self.chatPersistenceStorage = persistenceStorage
+        
         super.init(nibName: nil, bundle: nil)
     }
     
@@ -45,12 +48,22 @@ class ChatViewController: UIViewController {
         let tableViewTap = UITapGestureRecognizer(target: self, action: #selector(tableViewTap(_:)))
         chatView.tableView.addGestureRecognizer(tableViewTap)
         
-        chatView.tableView.dataSource = self
         chatView.tableView.estimatedRowHeight = 100
         chatView.tableView.rowHeight = UITableView.automaticDimension
         chatView.tableView.register(ChatMessageCell.self, forCellReuseIdentifier: kChatMessageCellID)
+        chatView.tableView.dataSource = self
         
         chatView.messagePanelView.rightButton?.addTarget(self, action: #selector(sendMessageButtonTap), for: .touchUpInside)
+        chatView.messagePanelView.leftButton?.addTarget(self, action: #selector(optionsButtonTap), for: .touchUpInside)
+        
+        // Custom back button
+        let backButtonItem = UIBarButtonItem(image: UIImage(named: "backIcon"),
+                                             style: .plain,
+                                             target: navigationController,
+                                             action: #selector(UINavigationController.popViewController(animated:)))
+        navigationItem.leftBarButtonItem = backButtonItem
+        navigationController?.navigationBar.tintColor = .black
+        navigationController?.interactivePopGestureRecognizer?.delegate = self
     }
 }
 
@@ -101,7 +114,7 @@ extension ChatViewController {
         
         if let text = chatView.messagePanelView.textView.text, text.count > 0 {
             let chatMessage = ChatMessage(text: text)
-            chatLocalPersistence.messages.insert(chatMessage, at: 0)
+            chatPersistenceStorage.add(message: chatMessage)
             
             DispatchQueue.main.async {
                 self.chatMessagePanelController.clearMessagePanelText()
@@ -113,13 +126,26 @@ extension ChatViewController {
             }
         }
     }
+    
+    @objc func optionsButtonTap() {
+
+        DispatchQueue.main.async {
+            
+            let actionsheet = UIAlertController(title: nil, message: nil, preferredStyle: UIAlertController.Style.actionSheet)
+            actionsheet.addAction(UIAlertAction(title: "Photo or Video", style: UIAlertAction.Style.default, handler: nil))
+            actionsheet.addAction(UIAlertAction(title: "Camera", style: UIAlertAction.Style.default, handler: nil))
+            actionsheet.addAction(UIAlertAction(title: "Cancel", style: UIAlertAction.Style.cancel, handler: nil))
+            
+            self.present(actionsheet, animated: true, completion: nil)
+        }
+    }
 }
 
 // MARK: - UITableViewDataSource
 extension ChatViewController: UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        chatLocalPersistence.messages.count
+        chatPersistenceStorage.messages.count
     }
     
     func numberOfSections(in tableView: UITableView) -> Int {
@@ -132,11 +158,19 @@ extension ChatViewController: UITableViewDataSource {
             return UITableViewCell()
         }
         
-        if indexPath.row < chatLocalPersistence.messages.count {
-            let message = chatLocalPersistence.messages[indexPath.row]
+        if indexPath.row < chatPersistenceStorage.messages.count {
+            let message = chatPersistenceStorage.messages[indexPath.row]
             cell.update(text: message.text)
         }
         
         return cell
+    }
+}
+
+/// MARK: - UIGestureRecognizerDelegate
+extension ChatViewController: UIGestureRecognizerDelegate {
+    
+    func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldRecognizeSimultaneouslyWith otherGestureRecognizer: UIGestureRecognizer) -> Bool {
+        return true
     }
 }

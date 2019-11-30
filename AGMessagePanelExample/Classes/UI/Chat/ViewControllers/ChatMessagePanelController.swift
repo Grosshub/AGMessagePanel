@@ -42,14 +42,14 @@ class ChatMessagePanelController: AGMessagePanelController {
         if type == .leftAndRightButton || type == .leftButtonOnly {
             return 50.0
         }
-        return 8.0
+        return super.textViewLeftOffset()
     }
     
     override func textViewRightOffset() -> CGFloat {
         if type == .leftAndRightButton || type == .rightButtonOnly {
             return 50.0
         }
-        return 8.0
+        return super.textViewRightOffset()
     }
     
     // MARK: - Left button settings
@@ -75,14 +75,14 @@ class ChatMessagePanelController: AGMessagePanelController {
     
     override func leftButtonBottomOffset() -> CGFloat {
         if type == .leftAndRightButton || type == .leftButtonOnly {
-            return 14.0
+            return 15.0
         }
         return 0.0
     }
     
     override func leftButtonLeftOffset() -> CGFloat {
         if type == .leftAndRightButton || type == .leftButtonOnly {
-            return 11.0
+            return 13.0
         }
         return 0.0
     }
@@ -109,7 +109,7 @@ class ChatMessagePanelController: AGMessagePanelController {
     
     override func rightButtonBottomOffset() -> CGFloat {
         if type == .leftAndRightButton || type == .rightButtonOnly {
-            return 14.0
+            return 16.0
         }
         return 0.0
     }

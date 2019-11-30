@@ -11,19 +11,41 @@ import UIKit
 /// Simple chat message cell
 class ChatMessageCell: UITableViewCell {
     
-    fileprivate var messageLabel: UILabel = {
-        let label = UILabel(frame: .zero)
+    fileprivate static var avatarPlaceholderImage = UIImage(named: "avatar")
+    fileprivate static var labelTextColor = UIColor.init(red: 89/255.0, green: 89/255.0, blue: 89/255.0, alpha: 1.0)
+    
+    fileprivate var avatarView: UIImageView = {
+        let imageView = UIImageView()
+        imageView.translatesAutoresizingMaskIntoConstraints = false
+        imageView.image = avatarPlaceholderImage
+        imageView.contentMode = .scaleAspectFit
+        imageView.layer.cornerRadius = (imageView.image?.size.height ?? 1) / 2
+        imageView.clipsToBounds = true
+        return imageView
+    }()
+    
+    fileprivate var usernameLabel: UILabel = {
+        let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
-        label.textColor = UIColor.init(red: 89/255.0, green: 89/255.0, blue: 89/255.0, alpha: 1.0)
+        label.textColor = labelTextColor
+        label.text = "Guest"
+        label.font = UIFont.systemFont(ofSize: 16, weight: .bold)
+        return label
+    }()
+    
+    fileprivate var messageLabel: UILabel = {
+        let label = UILabel()
+        label.translatesAutoresizingMaskIntoConstraints = false
+        label.textColor = labelTextColor
         label.font = UIFont.systemFont(ofSize: 16, weight: .regular)
         label.numberOfLines = 0
         return label
     }()
     
     fileprivate var separatorLine: UIView = {
-        let line = UIView(frame: .zero)
+        let line = UIView()
         line.translatesAutoresizingMaskIntoConstraints = false
-        line.backgroundColor = UIColor.init(red: 89/255.0, green: 89/255.0, blue: 89/255.0, alpha: 1.0)
+        line.backgroundColor = labelTextColor
         return line
     }()
     
@@ -55,13 +77,24 @@ class ChatMessageCell: UITableViewCell {
 
         let marginGuide = contentView.layoutMarginsGuide
         
+        contentView.addSubview(avatarView)
+        contentView.addSubview(usernameLabel)
         contentView.addSubview(messageLabel)
         contentView.addSubview(separatorLine)
         
-        messageLabel.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 10.0).isActive = true
-        messageLabel.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -10.0).isActive = true
-        messageLabel.topAnchor.constraint(equalTo: marginGuide.topAnchor).isActive = true
-        messageLabel.bottomAnchor.constraint(equalTo: marginGuide.bottomAnchor).isActive = true
+        avatarView.topAnchor.constraint(equalTo: marginGuide.topAnchor).isActive = true
+        avatarView.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 10.0).isActive = true
+        avatarView.heightAnchor.constraint(equalToConstant: avatarView.image?.size.height ?? 0.0).isActive = true
+        avatarView.widthAnchor.constraint(equalToConstant: avatarView.image?.size.width ?? 0.0).isActive = true
+        
+        usernameLabel.topAnchor.constraint(equalTo: marginGuide.topAnchor, constant: 0).isActive = true
+        usernameLabel.leadingAnchor.constraint(equalTo: avatarView.trailingAnchor, constant: 15.0).isActive = true
+        usernameLabel.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -15.0).isActive = true
+        
+        messageLabel.topAnchor.constraint(equalTo: usernameLabel.bottomAnchor, constant: 3.0).isActive = true
+        messageLabel.leadingAnchor.constraint(equalTo: usernameLabel.leadingAnchor).isActive = true
+        messageLabel.trailingAnchor.constraint(equalTo: usernameLabel.trailingAnchor).isActive = true
+        messageLabel.bottomAnchor.constraint(equalTo: marginGuide.bottomAnchor, constant: -5.0).isActive = true
 
         let separatorLineHeight: CGFloat = 1.0 / UIScreen.main.scale
         separatorLine.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 10.0).isActive = true

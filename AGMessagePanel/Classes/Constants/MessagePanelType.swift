@@ -11,10 +11,10 @@ import Foundation
 /// Defines different types of message panel
 /// Select .rightButtonOnly if you need a classical message panel
 /// with a text view and send button on the right side
-enum MessagePanelType {
+enum MessagePanelType: Int, CaseIterable {
     
-    case withoutButtons
-    case leftButtonOnly
-    case rightButtonOnly
-    case leftAndRightButton
+    case withoutButtons     // TextView without any buttons
+    case leftButtonOnly     // TextView with left button
+    case rightButtonOnly    // TextView with right button
+    case leftAndRightButton // TextView with left and right button
 }
