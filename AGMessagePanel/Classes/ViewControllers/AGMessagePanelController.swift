@@ -43,6 +43,7 @@ open class AGMessagePanelController: UIViewController, AGMessagePanelDelegate {
     }
     
     open func clearMessagePanelText() {
+        
         messagePanelView.textView.text = ""
         messagePanelView.placeholderLabel.isHidden = false
         updateMessagePanel()
@@ -141,11 +142,12 @@ open class AGMessagePanelController: UIViewController, AGMessagePanelDelegate {
 extension AGMessagePanelController: UITextViewDelegate {
     
     public func textViewDidChange(_ textView: UITextView) {
-        
+
         let textPosition = textView.endOfDocument
         let caretRect = textView.caretRect(for: textPosition)
         previousCaretRect = previousCaretRect.origin.y == 0.0 ? caretRect : previousCaretRect
-        if caretRect.origin.y != previousCaretRect.origin.y {
+        if caretRect.origin.y != previousCaretRect.origin.y && textView.numberOfLines() < textViewVisibleLines() {
+            print("!!!")
             updateMessagePanel()
         }
         previousCaretRect = caretRect
@@ -154,7 +156,6 @@ extension AGMessagePanelController: UITextViewDelegate {
     public func textView(_ textView: UITextView, shouldChangeTextIn range: NSRange, replacementText text: String) -> Bool {
         
         if text.count == 0 && range.location == 0 {
-            
             messagePanelView.textView.text = ""
             updateMessagePanel()
         }

@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import AGMessagePanel
 
 /// View controller that controls the chat view
 class ChatViewController: UIViewController {
@@ -15,7 +16,7 @@ class ChatViewController: UIViewController {
     private let keyboardController = KeyboardController()
     private let kChatMessageCellID = "kChatMessageCellID"
     
-    private var chatMessagePanelController: ChatMessagePanelController
+    private var chatMessagePanelController: AGMessagePanelController
     private var chatPersistenceStorage: ChatPersistenceStorageProtocol
     
     init(type: MessagePanelType, persistenceStorage: ChatPersistenceStorageProtocol) {
