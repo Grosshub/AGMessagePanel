@@ -4,6 +4,8 @@ Extendable and easy to use text area for chat.
 With AGMessagePanel framework it's easy to setup a full functional text area for messengers in few lines of code.
 You could configure the text area placeholder, number of max lines when text is growing, left or right buttons to send a message or to attach a file to your message.
 
+![AGMessagePanel Demo](demo/demo.gif)
+
 ### Main UI components:
  * `transparent area view` - define the top transparent areat before the message panel
  * `message area view` - define the message area that includes text view, left and right buttons
